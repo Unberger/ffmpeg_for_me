@@ -1,5 +1,5 @@
-# Базовый образ n8n (Alpine)
-FROM n8nio/n8n:1.49.1
+# Базовый официальный образ n8n (Alpine)
+FROM n8nio/n8n:latest
 
 # Переключаемся в root для установки пакетов
 USER root
