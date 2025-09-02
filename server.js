@@ -39,14 +39,11 @@ async function downloadToTemp(url) {
   const out = path.join(os.tmpdir(), `in-${uuidv4()}.bin`);
   const resp = await fetch(url);
   if (!resp.ok) throw new Error(`Fetch failed: ${resp.status} ${resp.statusText}`);
-  const fileStream = fs.createWriteStream(out);
-  await new Promise((resolve, reject) => {
-    resp.body.pipe(fileStream);
-    resp.body.on('error', reject);
-    fileStream.on('finish', resolve);
-  });
+  const arrayBuffer = await resp.arrayBuffer();
+  await fsp.writeFile(out, Buffer.from(arrayBuffer));
   return out;
 }
+
 
 function ffmpegConvert(inputPath, outputPath, format) {
   const args = ['-y', '-i', inputPath, '-vn'];
