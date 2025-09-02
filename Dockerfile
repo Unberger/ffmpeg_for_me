@@ -1,13 +1,14 @@
-# Базовый официальный образ n8n (Alpine)
-FROM n8nio/n8n:latest
+FROM node:18-alpine
 
-# Переключаемся в root для установки пакетов
-USER root
-
-# Устанавливаем ffmpeg через apk (Alpine Linux)
+# ffmpeg в Alpine ставится через apk
 RUN apk add --no-cache ffmpeg
 
-# Возвращаемся к пользователю node
-USER node
+WORKDIR /app
+COPY package.json ./
+RUN npm install --omit=dev
 
-EXPOSE 5678
+COPY server.js ./
+
+ENV PORT=3000
+# можно задать лимит загрузки, см. переменную MAX_FILE_SIZE_MB
+CMD ["node", "server.js"]
